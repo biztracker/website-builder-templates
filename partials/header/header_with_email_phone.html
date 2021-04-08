@@ -13,19 +13,30 @@
   {{ $brandText = .content.brandText}}
 {{ end }}
 
-{{$divId := "header"}}
-
-{{ if eq .content.isSticky true }}
-  {{ $divId = "sticky-header"}}
-{{ end }}
-
-<div id="{{$divId}}" class="bg-white overflow-hidden z-50" style="">
+<!-- TODO: some changes have been made for vertical logos. 
+make it configuratioble and merge to mainline !-->
+<div id="{{.block.divId}}" class="bg-white">
     <div class="max-w-7xl mx-auto">
       <div class="z-10 pb-4 bg-white sm:pb-4 md:pb-4 lg:w-full lg:pb-4 xl:pb-4">
-        <svg class="hidden absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <polygon points="50,0 100,0 50,100 0,100" />
-        </svg>
-  
+      {{if eq .content.showEmailPhoneOnMobile true}}
+        <div class="block md:hidden bg-gray-100 p-1 " style="font-size:14px; justify-content:flex-end">
+            <div class="text-center py-1">
+                <span class="pb-2 block">
+                  <svg class="h-5 inline text-gray-800 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <a href="mailto:{{.content.email}}" class="font-medium text-gray-800 hover:text-gray-900">{{.content.email}}</a>
+                </span>
+                <span class="block">
+                  <svg class="h-5 inline text-gray-800 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <a href="tel:{{.content.phoneNumber}}" class="font-medium text-gray-800 hover:text-gray-900">{{.content.phoneNumber}}</a>
+                </span>
+              </div>
+          </div>
+        {{end}}
+        
         <div class="pt-4 px-4 sm:px-6 lg:px-8">
           <nav class="flex items-center justify-between h-12 lg:justify-start" aria-label="Global">
             <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
@@ -35,7 +46,11 @@
                   {{if eq $showBrandAs "TEXT"}}
                     <span class="font-bold text-primary ">{{$brandText}}</span>
                   {{else}}
-                    <img class="h-10 w-auto sm:h-10" src="{{$brandlogoURL}}">
+                    {{if eq .content.showLogoAs "VERTICAL"}}
+                      <img class="h-28 w-auto mt-10" style="overflow:visible" src="{{$brandlogoURL}}">
+                    {{else}}
+                      <img class="h-10 w-auto" src="{{$brandlogoURL}}">
+                    {{end}}
                   {{end}}
                 </a>
                 <div class="-mr-2 flex items-center md:hidden">
@@ -131,5 +146,3 @@
       </div>
     </div>
   </div>  
-  <!-- below div block is added for sticky header -->
-<div class="content"> </div>
