@@ -67,7 +67,11 @@ make it configuratioble and merge to mainline !-->
             <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
                {{ if isset .content "navBarlist" }}
                  {{ range .content.navBarlist }}
-                    <a href="{{.href}}"  class="font-medium text-gray-800 hover:text-gray-900">{{.text}}</a>
+                  {{if isset . "target"}}
+                    <a href="{{.href}}" target="{{.target}}" class="font-medium text-gray-800 hover:text-gray-900">{{.text}}</a>
+                  {{else}}
+                    <a href="{{.href}}" class="font-medium text-gray-800 hover:text-gray-900">{{.text}}</a>  
+                  {{end}}
                 {{end}}
               {{end}}
             </div>
@@ -126,7 +130,12 @@ make it configuratioble and merge to mainline !-->
               {{ if isset .content "navBarlist" }}
 
                  {{ range .content.navBarlist }}
+                 {{if isset . "target"}}
+                    <a href="{{.href}}" target="{{.target}}" onClick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:text-gray-900 hover:bg-gray-50" role="menuitem">{{.text}}</a>
+                  {{else}}
                     <a href="{{.href}}" onClick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:text-gray-900 hover:bg-gray-50" role="menuitem">{{.text}}</a>
+                  {{end}}
+                    
                 {{end}}
              {{else}} 
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:text-gray-900 hover:bg-gray-50" role="menuitem">Product</a>       
