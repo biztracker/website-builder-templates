@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{.Params.title }}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="keywords" content="{{ .Params.keywords }}">
+    <meta name="description" content="{{ .Params.description }}">
+    <meta property="og:title" content="{{ .Params.title }}" />
+    <meta property="og:description" content="{{ .Params.description }}" />
+
+     {{partial "css.html"}}
+      {{partial "tagManagerHeadPart.html" .}}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+    
+  </head>
+
+  <body>
+    {{partial "tagManagerBodyPart.html" .}}
+     {{ range $elem_index, $elem_val := $.Params.blocks }}
+
+        {{partial $elem_val.partialRelativePath (dict "block" . "content" $elem_val.content)}}
+
+    {{end}}
+
+    {{partial "photo_swipe.html"}}
+
+  </body>
+    <!-- Core JS file -->
+    <script src="/js/photoswipe.min.js"></script> 
+
+    <!-- UI JS file -->
+    <script src="/js/photoswipe-ui-default.min.js" ></script> 
+ <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
+
+    {{partial "js.html"}}
+</html>

@@ -1,0 +1,9 @@
+{{ define "main"}}
+
+    {{ range $elem_index, $elem_val := $.Params.blocks }}
+
+        {{partial $elem_val.partialRelativePath (dict "block" . "content" $elem_val.content)}}
+
+    {{end}}
+
+{{ end }}

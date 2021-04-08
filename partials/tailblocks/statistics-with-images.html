@@ -1,0 +1,41 @@
+{{$mainText := "Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag."}}
+{{$headingText := "About Our Project"}}
+{{ if isset .content "mainText" }}
+  {{ $mainText = .content.mainText  }}
+{{ end }}
+{{ if isset .content "headingText" }}
+  {{ $headingText = .content.headingText  }}
+{{ end }}
+
+
+{{ $list := (.content.statsList) }}
+
+<section id="{{.block.divId}}" class="text-gray-600 body-font">
+  <div class="container px-2 md:px-5 py-12 mx-auto">
+    <div class="flex flex-col text-center w-full mb-10">
+      <h1 class="sm:text-4xl text-4xl font-medium title-font mb-4 text-gray-900">{{$headingText}}</h1>
+      <div class="flex justify-center">
+        <div class="w-16 h-1 rounded-full bg-primary inline-flex"> </div>
+        </div>
+      <p class="lg:w-2/3 mx-auto pt-10 leading-relaxed text-base text-gray-700">{{$mainText | safeHTML}}</p>
+    </div>
+
+    {{ if isset .content "imageURL" }}
+      <div class="md:px-10 py-4">
+        <img class="lazy object-center" src="/images/preview-load-grey.jpg" data-src="{{.content.imageURL}}" alt="step"/>
+      </div>
+    {{end}}
+
+    <div class="flex flex-wrap -m-4 lg:px-10 mb:px-10 px-4 py-2 text-center">
+        {{ range $list  }}
+          <div class="p-1 md:p-4 md:w-1/{{len $list}} w-1/2">
+            <div class="border-2 border-gray-200 py-6 rounded-lg text-center">
+              <img class="h-10 md:h-20" style="display: inline;" src="{{.imageURL}}" />
+              <h2 class="md:title-font font-medium pt-2 text-lg md:text-xl text-gray-900">{{.text}}</h2>
+              <p class="leading-relaxed">{{.caption}}</p>
+            </div>
+          </div>
+        {{end}}
+    </div>
+  </div>
+</section>

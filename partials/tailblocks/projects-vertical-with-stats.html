@@ -1,0 +1,69 @@
+{{$mainText := "Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag."}}
+{{$headingText := "About Our Project"}}
+{{$buttonType := .content.buttonType}}
+{{$borderColor := "border-gray-200"}}
+{{ if isset .content "mainText" }}
+  {{ $mainText = .content.mainText  }}
+{{ end }}
+{{ if isset .content "headingText" }}
+  {{ $headingText = .content.headingText  }}
+{{ end }}
+{{ if isset .content "borderColor" }}
+  {{ $borderColor = .content.borderColor  }}
+{{ end }}
+
+<section id="{{.block.divId}}" class="text-gray-600 body-font">
+  <div class="container py-8 mx-auto">
+    <div class="flex flex-col text-center w-full mb-10">
+      <h1 class="sm:text-4xl text-4xl font-medium title-font mb-4 text-gray-900">{{$headingText}}</h1>
+      <div class="flex justify-center">
+        <div class="w-16 h-1 rounded-full bg-primary inline-flex"> </div>
+        </div>
+      <p class="lg:w-2/3 mx-auto pt-5 leading-relaxed text-base">{{$mainText}}</p>
+    </div>
+
+    {{ range .content.projectList  }}
+      <div class="container lg:px-5 lg:py-8 py-4 mx-auto ">
+       <a href="{{.href}}">                                                                 
+        <div class="lg:w-4/5 mx-auto flex flex-wrap {{$borderColor}} border-2  border-opacity-60 rounded-lg ">                                                                
+          <img alt="ecommerce" class="lg:w-1/2 w-full h-80 xs:h-40 object-cover object-center rounded" src="{{.imageURL}}">
+          <div class="lg:w-1/2 w-full lg:pl-6 lg:py-5 mt-6 lg:mt-0 p-4">
+            <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">{{.heading}}</h1>
+            <div class="mb-3 flex flex-row">
+              <div class="" style="margin-left:-3px">
+                <img class="text-pink-700  pr-1" style="height:22px; padding-top:3px; "  src="/images/icons/location.png"/>                      
+              </div>
+              <div class="">{{.location}}</div>
+            </div>
+            <p class="leading-relaxed pt-1">{{.description}}</p>
+            
+
+            {{ if eq $buttonType "BORDER" }} 
+                <button class="text-white bg-primary border-0 mt-2 py-2 px-4 focus:outline-none hover:bg-hover rounded text-sm">KNOW MORE</button>
+            {{else}}
+            <a class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0 mt-2">Know More
+                <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            {{end}}
+            <hr class="mt-4"/>
+            <ul class="flex flex-wrap">
+                 {{ range .statsList }}
+                    <li class="my-2 pt-2 w-1/4 overflow-hidden text-center">
+                        <img style="height:20px;display: inline;" src="{{.imageURL}}" />
+                        <h3 class="text-bold text-sm pt-2">{{.text}} </h3> 
+                    </li>
+                 {{end}}
+             </ul>
+          </div>
+
+        </div>
+        </a>
+      </div>
+
+    {{end}}
+
+  </div>
+</section>

@@ -1,0 +1,85 @@
+{{$bgColor := ""}}
+{{$textColor := ""}}
+{{$imageCropStyle := "object-cover"}}
+{{$imageDataSize:= "600x400"}}
+{{$imageURL := "https://images.unsplash.com/photo-1563286130-945bc9d7803c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2545&q=80"}}
+{{ if isset .content "bgColor" }} 
+    {{ $bgColor = .content.bgColor  }}
+{{ end }}
+
+{{ if isset .content "textColor" }} 
+    {{ $textColor = .content.textColor  }}
+{{ end }}
+
+{{ if isset .content "imageURL" }} 
+    {{ $imageURL = .content.imageURL  }}
+{{ end }}
+
+{{ if isset .content "imageCropStyle" }} 
+    {{ $imageCropStyle = .content.imageCropStyle  }}
+{{ end }}
+
+{{ if isset .content "imageDataSize" }}
+  {{ $imageDataSize = .content.imageDataSize  }}
+{{ end }}
+
+
+{{ $list := (.content.statsList) }}
+
+
+<section id="{{.block.divId}}" class="text-gray-600 body-font mt-10 {{$bgColor}}">
+  <div class="container px-2 md:px-12 py-8 mx-auto flex flex-wrap">
+      <div class="text-center mb-20">
+        <h1 class="sm:text-4xl text-4xl font-medium title-font text-gray-900 mb-4 ">Location Advantages</h1>
+        <div class="flex mt-6 justify-center">
+        <div class="w-16 h-1 rounded-full bg-primary inline-flex"></div>
+      </div>
+    <div class="flex flex-wrap w-full pt-10">
+
+    <div class="lg:w-1/2 md:w-1/2 md:mt-0 mt-4 my-gallery flex " style="align-items:center">
+      <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+        <a href="{{$imageURL}}" itemprop="contentUrl" data-size="{{$imageDataSize}}">              
+          <img class="lazy object-center {{$imageCropStyle}} " src="/images/preview-load-grey.jpg" data-src="{{$imageURL}}" alt="step">
+        </a>
+      </figure>
+    </div>
+     <div class="lg:w-1/2 md:w-1/2 md:pl-10 md:py-0 mt-10">
+     {{ range $index, $element := $list }}
+
+      {{ if eq (add $index 1) (len $list) }}
+
+        <div class="flex relative">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary  inline-flex items-center justify-center text-white relative z-10 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div class="flex-grow pl-4">
+            <h2 class="text-gray-900 mb-1 tracking-wider">{{$element.text}}</h2>
+            <p class="leading-relaxed text-lg font-medium title-font  text-gray-900 ">{{$element.caption}}</p>
+          </div>
+        </div>
+
+      {{else}}
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary inline-flex items-center justify-center text-white relative z-10 p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="  text-gray-900 mb-1 tracking-wider">{{$element.text}}</h2>
+              <p class="leading-relaxed text-lg font-medium title-font text-gray-900 ">{{$element.caption}}</p>
+            </div>
+          </div>
+        {{end}}
+     {{end}}
+      </div>
+    </div>
+  </div>
+</section>

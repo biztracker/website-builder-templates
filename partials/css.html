@@ -1,0 +1,11 @@
+{{ $styles := resources.Get "css/main.css" }}
+{{ $styles = $styles | postCSS (dict "config" "./postcss.config.js") }}
+
+{{ if not .Site.IsServer}}
+    {{ $styles = $styles | minify }}
+{{ end }}
+
+<link href="{{ $styles.Permalink }}" rel="stylesheet" />
+
+    <!-- Core CSS file -->
+<link rel="stylesheet" href="/css/photoswipe-with-default-skin.min.css"> 

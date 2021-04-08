@@ -1,0 +1,56 @@
+{{$bgColor := ""}}
+{{$textColor := ""}}
+{{$imageURL := "https://images.unsplash.com/photo-1513082575024-27c508685592?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1336&q=80"}}
+{{$imageCropStyle:= "object-cover"}}
+{{$imageDataSize:= "600x400"}}
+{{ if isset .content "bgColor" }}
+{{ $bgColor = .content.bgColor  }}
+{{ end }}
+
+{{ if isset .content "textColor" }}
+{{ $textColor = .content.textColor  }}
+{{ end }}
+
+{{ if isset .content "imageURL" }}
+{{ $imageURL = .content.imageURL  }}
+{{ end }}
+
+{{ if isset .content "imageCropStyle" }}
+{{ $imageCropStyle = .content.imageCropStyle  }}
+{{ end }}
+
+{{ if isset .content "imageDataSize" }}
+{{ $imageDataSize = .content.imageDataSize  }}
+{{ end }}
+
+<section id="{{.block.divId}}" class="text-gray-600 body-font {{$bgColor}} py-6">
+    <div class="text-center">
+        <h1 class="sm:text-4xl text-4xl font-medium title-font text-gray-900 mb-4  ">Project Layout</h1>
+        <div class="flex mt-6 justify-center">
+            <div class="w-16 h-1 rounded-full bg-primary inline-flex"></div>
+        </div>
+        <div class="container mx-auto flex lg:px-16 md:px-16 px-4 py-10 md:flex-row flex-col items-center">
+            <div
+                class="md:w-1/3 lg:pr-24 md:pr-16 flex flex-col md:items-start mb-16 md:mb-0 items-center text-center">
+                <p class="mb-8 leading-relaxed {{$textColor}}"></p>
+                <ul class="flex flex-wrap">
+                 {{ range .content.statsList }}
+                    <li class="my-4 px-2 w-1/2 overflow-hidden {{$textColor}}">
+                        <img class="h-10 md:h-20" style="display: inline;" src="{{.imageURL}}" />
+                        <h3 class="text-bold text-lg md:text-xl pt-2">{{.text}} </h3>
+                        <span>{{.caption}}</span>    
+                    </li>
+                 {{end}}
+                </ul>
+
+            </div>
+            <div class="md:w-2/3 w-full my-gallery">
+                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                    <a href="{{$imageURL}}" itemprop="contentUrl" data-size="{{$imageDataSize}}">
+                        <img class="lazy {{$imageCropStyle}} object-center rounded w-full"
+                            alt="hero" src="/images/preview-load-grey.jpg" data-src="{{$imageURL}}">
+                    </a>
+                </figure>
+            </div>
+        </div>
+</section>

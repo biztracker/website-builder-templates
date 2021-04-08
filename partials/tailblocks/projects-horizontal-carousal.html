@@ -1,0 +1,69 @@
+{{$mainText := "Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag."}}
+{{$headingText := "About Our Project"}}
+{{$buttonType := .content.buttonType}}
+{{ if isset .content "mainText" }}
+{{ $mainText = .content.mainText  }}
+{{ end }}
+{{ if isset .content "headingText" }}
+{{ $headingText = .content.headingText  }}
+{{ end }}
+
+<section id="{{.block.divId}}" class="text-gray-600 body-font">
+  <div class="container md:px-5 py-8 mx-auto">
+    <div class="flex flex-col text-center w-full mb-10">
+      <h1 class="sm:text-4xl text-4xl font-medium title-font mb-4 text-gray-900">{{$headingText}}</h1>
+      <div class="flex justify-center">
+        <div class="w-16 h-1 rounded-full bg-primary inline-flex"> </div>
+        </div>
+      <p class="lg:w-2/3 mx-auto pt-5 leading-relaxed text-base">{{$mainText}}</p>
+    </div>
+
+    <div class="">
+      <div class="splide" data-splide='{"type":"loop", "autoplay": true, "perPage":3, "breakpoints": {"640": {"perPage": 1}}}'>
+	      <div class="splide__track">
+		      <ul class="splide__list">
+        {{ range .content.projectList  }}
+
+			<li class="splide__slide">
+              <div class="p-2">
+              <a href="{{.href}}">
+                  <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                  <img class="lg:h-48 h-36 w-full object-cover object-center" src="{{.imageURL}}" alt="blog">
+                  <div class="p-6">
+                      <h2 class="tracking-widest text-xs title-font font-medium text-primary mb-1">{{.category}}</h2>
+                      <h1 class="title-font text-lg font-medium text-gray-900 ">{{.heading}}</h1>
+                      <div class="mb-3 flex flex-row">
+                        <div class="" style="margin-left:-3px">
+                          <img class="pr-1" style="height:22px;padding-top:3px; "  src="/images/icons/location.png"/>                      
+                        </div>
+                        <div class="">{{.location}}</div>
+                      </div>
+                      <p class="leading-relaxed mt-3 mb-3 h-20">{{.description}}</p>
+
+                      <div class="flex items-center flex-wrap ">
+
+                      {{ if eq $buttonType "BORDER" }} 
+                        <button class="text-white bg-primary border-0 py-2 px-4 focus:outline-none hover:bg-hover rounded text-sm">KNOW MORE</button>
+                      {{else}}
+                        <a class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0" href="{{.href}}">Know More
+                            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                      {{end}}
+                      </div>
+                  </div>
+                  </div>
+
+                  </a>
+              </div>
+              
+              </li>
+        {{end}}
+       </ul>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>

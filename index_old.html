@@ -1,0 +1,39 @@
+{{ define "main"}}
+
+ <div>
+    {{ range $elem_index, $elem_val := $.Params.blocks }}
+
+        {{partial $elem_val.partialRelativePath (dict "Page" . "content" $elem_val.content)}}
+
+    {{end}}
+
+ </div>
+
+    {{partial "header/header_type1.html" (dict "content" .)}}
+
+    {{partial "hero/hero_type1.html" .}}
+
+    {{partial "hero/hero_type2.html" .}}
+
+    {{partial "section/gradient_background_image.html" .}}
+
+    {{partial "section/cta_type1.html" .}}
+
+    {{partial "section/content_with_image_type1.html" .}}
+
+    {{partial "section/content_with_image_type2.html" .}}
+
+    {{partial "section/faq.html" .}}
+
+
+    {{partial "section/skills_display_type1.html" .}}
+
+
+    {{partial "forms/contact_form_with_image1.html" .}}
+
+
+    {{partial "forms/contact_form_no_image.html" .}}
+
+
+    {{partial "footer/footer_type3.html" .}}
+{{ end }}

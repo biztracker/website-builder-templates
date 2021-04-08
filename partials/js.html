@@ -1,0 +1,326 @@
+  <script>
+  const StickyHeaderId = "sticky-header";
+  function onBiztrackerFormSubmit() {
+    event.preventDefault();
+    var xhr = new XMLHttpRequest();
+    //TODO: validate phone number locally
+    xhr.open("POST", "https://biztracker.in/crm/v1/leadSubmit"); 
+
+    document.getElementById("biztrackerContactFormMessage").innerHTML = "<p class=\"font-medium text-gray-800 h-6\"> Submitting details.... </p>";    
+    
+    xhr.onload = function(event){
+      if (xhr.status == 200) {
+        alert("Your details have been submitted successfully. Our sales team will reach out to you !"); 
+        document.getElementById("biztrackerContactFormMessage").innerHTML = "<p class=\"font-medium text-green-800 h-6\"> Successfully Submitted </p>";
+        document.getElementById("biztrackerContactForm").reset();
+      } else {
+        alert("Submission failed, Please check your details and try again"); 
+        document.getElementById("biztrackerContactFormMessage").innerHTML = "<p class=\"font-medium text-red-800 h-6\"> Submission failed. Please try again ! </p>";
+      }
+    }; 
+    var formData = new FormData(document.getElementById("biztrackerContactForm")); 
+    xhr.send(formData);
+
+    return false;
+   }
+// Get the header
+var header = document.getElementById(StickyHeaderId);
+//the below code runs when sticky header is present
+if (header) {
+    // Get the offset position of the navbar
+    var sticky = header.offsetTop;
+
+    addcss("section {scroll-margin-top: 80px;}")
+
+    window.onscroll = function() {makeHeaderSticky()};
+
+    function makeHeaderSticky() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky-header");
+            header.classList.add("shadow-md");
+        } else {
+            header.classList.remove("sticky-header");
+            header.classList.remove("shadow-md");
+        }
+    }
+}
+
+function addcss(css){
+    var head = document.getElementsByTagName('head')[0];
+    var s = document.createElement('style');
+    s.setAttribute('type', 'text/css');
+    if (s.styleSheet) {   // IE
+        s.styleSheet.cssText = css;
+    } else {                // the world
+        s.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(s);
+ }
+
+  function toggleMenu() {
+    var x = document.getElementById("header-menu");
+      if (x.style.display === "block") {
+        x.style.display = "none";
+      } else {
+        x.style.display = "block";
+      }
+  }
+
+  var initPhotoSwipeFromDOM = function(gallerySelector) {
+
+    // parse slide data (url, title, size ...) from DOM elements 
+    // (children of gallerySelector)
+    var parseThumbnailElements = function(el) {
+            
+        var thumbElements = el.childNodes,
+            numNodes = thumbElements.length,
+            items = [],
+            figureEl,
+            linkEl,
+            size,
+            item;
+
+        for(var i = 0; i < numNodes; i++) {
+
+            figureEl = thumbElements[i]; // <figure> element
+
+            // include only element nodes 
+            if(figureEl.nodeType !== 1) {
+                continue;
+            }
+
+            linkEl = figureEl.children[0]; // <a> element
+
+            size = linkEl.getAttribute('data-size').split('x');
+
+            // create slide object
+            item = {
+                src: linkEl.getAttribute('href'),
+                w: parseInt(size[0], 10),
+                h: parseInt(size[1], 10)
+            };
+
+
+
+            if(figureEl.children.length > 1) {
+                // <figcaption> content
+                item.title = figureEl.children[1].innerHTML; 
+            }
+
+            if(linkEl.children.length > 0) {
+                // <img> thumbnail element, retrieving thumbnail url
+                item.msrc = linkEl.children[0].getAttribute('src');
+            } 
+
+            item.el = figureEl; // save link to element for getThumbBoundsFn
+            items.push(item);
+        }
+
+        return items;
+    };
+
+    // find nearest parent element
+    var closest = function closest(el, fn) {
+        return el && ( fn(el) ? el : closest(el.parentNode, fn) );
+    };
+
+    // triggers when user clicks on thumbnail
+    var onThumbnailsClick = function(e) {
+        e = e || window.event;
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+
+        var eTarget = e.target || e.srcElement;
+
+        // find root element of slide
+        var clickedListItem = closest(eTarget, function(el) {
+            return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+        });
+
+        if(!clickedListItem) {
+            return;
+        }
+
+        // find index of clicked item by looping through all child nodes
+        // alternatively, you may define index via data- attribute
+        var clickedGallery = clickedListItem.parentNode,
+            childNodes = clickedListItem.parentNode.childNodes,
+            numChildNodes = childNodes.length,
+            nodeIndex = 0,
+            index;
+
+        for (var i = 0; i < numChildNodes; i++) {
+            if(childNodes[i].nodeType !== 1) { 
+                continue; 
+            }
+
+            if(childNodes[i] === clickedListItem) {
+                index = nodeIndex;
+                break;
+            }
+            nodeIndex++;
+        }
+
+
+
+        if(index >= 0) {
+            // open PhotoSwipe if valid index found
+            openPhotoSwipe( index, clickedGallery );
+        }
+        return false;
+    };
+
+    // parse picture index and gallery index from URL (#&pid=1&gid=2)
+    var photoswipeParseHash = function() {
+        var hash = window.location.hash.substring(1),
+        params = {};
+
+        if(hash.length < 5) {
+            return params;
+        }
+
+        var vars = hash.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            if(!vars[i]) {
+                continue;
+            }
+            var pair = vars[i].split('=');  
+            if(pair.length < 2) {
+                continue;
+            }           
+            params[pair[0]] = pair[1];
+        }
+
+        if(params.gid) {
+            params.gid = parseInt(params.gid, 10);
+        }
+
+        return params;
+    };
+
+    var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
+        var pswpElement = document.querySelectorAll('.pswp')[0],
+            gallery,
+            options,
+            items;
+
+        items = parseThumbnailElements(galleryElement);
+
+        // define options (if needed)
+        options = {
+
+            // define gallery index (for URL)
+            galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+            arrowEl: true,
+
+            getThumbBoundsFn: function(index) {
+                // See Options -> getThumbBoundsFn section of documentation for more info
+                var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
+                    pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+                    rect = thumbnail.getBoundingClientRect(); 
+
+                return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+            }
+
+        };
+
+        // PhotoSwipe opened from URL
+        if(fromURL) {
+            if(options.galleryPIDs) {
+                // parse real index when custom PIDs are used 
+                // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
+                for(var j = 0; j < items.length; j++) {
+                    if(items[j].pid == index) {
+                        options.index = j;
+                        break;
+                    }
+                }
+            } else {
+                // in URL indexes start from 1
+                options.index = parseInt(index, 10) - 1;
+            }
+        } else {
+            options.index = parseInt(index, 10);
+        }
+
+        // exit if index not found
+        if( isNaN(options.index) ) {
+            return;
+        }
+
+        if(disableAnimation) {
+            options.showAnimationDuration = 0;
+        }
+
+        // Pass data to PhotoSwipe and initialize it
+        gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
+    };
+
+    // loop through all gallery elements and bind events
+    var galleryElements = document.querySelectorAll( gallerySelector );
+
+    for(var i = 0, l = galleryElements.length; i < l; i++) {
+        galleryElements[i].setAttribute('data-pswp-uid', i+1);
+        galleryElements[i].onclick = onThumbnailsClick;
+    }
+
+    // Parse URL and open gallery if it contains #&pid=3&gid=1
+    var hashData = photoswipeParseHash();
+    if(hashData.pid && hashData.gid) {
+        openPhotoSwipe( hashData.pid ,  galleryElements[ hashData.gid - 1 ], true, true );
+    }
+};
+
+// execute above function
+initPhotoSwipeFromDOM('.my-gallery');
+
+
+window.addEventListener('load', function() {
+    let lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+    let active = false;
+
+    const lazyLoad = function() {
+        if (active === false) {
+        active = true;
+    
+        setTimeout(function() {
+            lazyImages.forEach(function(lazyImage) {
+                lazyImage.src = lazyImage.dataset.src;
+                //lazyImage.srcset = lazyImage.dataset.srcset;
+                lazyImage.classList.remove("lazy");
+    
+                lazyImages = lazyImages.filter(function(image) {
+                return image !== lazyImage;
+                });
+    
+                if (lazyImages.length === 0) {
+                document.removeEventListener("scroll", lazyLoad);
+                window.removeEventListener("resize", lazyLoad);
+                window.removeEventListener("orientationchange", lazyLoad);
+                }
+            //}
+            });
+    
+            active = false;
+        }, 1000);
+        }
+    };
+
+    lazyLoad();
+
+    setTimeout(function(){
+        var gMapsIframe = document.getElementById('g-maps-iframe');
+        if (gMapsIframe) {
+            gMapsIframe.src = gMapsIframe.dataset.src;
+        }
+    }, 500);
+
+    if (typeof Splide !== "undefined") {
+       var elms = document.getElementsByClassName( 'splide' );
+        for ( var i = 0, len = elms.length; i < len; i++ ) {
+            new Splide( elms[ i ] ).mount();
+        }
+    }
+});
+
+</script>
