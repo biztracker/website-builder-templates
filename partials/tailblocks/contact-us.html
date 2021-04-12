@@ -8,6 +8,7 @@
       <p class="lg:w-2/3 mx-auto leading-relaxed pt-5 text-base">Our sales team will get back to you as soon as possible</p>
     </div>
     <div class="lg:w-1/2 md:w-2/3 mx-auto">
+      <div id="biztrackerContactFormMessage"> <p class="font-medium text-gray-800 h-6"> </p></div>
       <form name={{.content.formId}} id={{.content.formId}} onsubmit="onBiztrackerFormSubmit()">
         {{ if isset .content "biztrackerIntegrationKey" }}
           <input name="key" id="key" type="hidden" value="{{.content.biztrackerIntegrationKey}}">
