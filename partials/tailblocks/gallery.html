@@ -23,8 +23,10 @@
                 class="{{cond (eq (mod $index 3) 0) "md:p-2 p-1 w-1/2" "md:p-2 p-1 w-1/4"}} 
            */}}
 
+            {{ $img := imageConfig (add "/static" ($image | safeURL)) }}
             <figure class="md:p-2 p-1 md:w-1/3 w-1/2"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-                <a href="{{$image}}" itemprop="contentUrl" data-size="600x400">
+                <a href="{{$image}}" itemprop="contentUrl" data-size="{{$img.Width}}x{{$img.Height}}">
+                    
                     <img alt="gallery" class="lazy w-full object-cover h-full object-center block"
                         src="/images/preview-load-grey.jpg" 
                         data-src="{{$image}}">
